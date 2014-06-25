@@ -8,14 +8,35 @@
   with_items:
     - dnsmasq
 
-- name: update /etc/dnsmasq.conf from template
-  template:
-    src: etc/dnsmasq.conf
+- name: add line in /etc/dnsmasq.conf to set root user for TRAVIS
+  lineinfile:
     dest: /etc/dnsmasq.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart dnsmasq
+    regexp: ^user=
+    line: user=root
+    insertafter: ^#user=
+    state: present
+  when: lookup('env', 'TRAVIS')
+  notify: 
+    - restart dnsmasq
+
+- name: add line in /etc/dnsmasq.conf to set listen-address
+  lineinfile:
+    dest: /etc/dnsmasq.conf
+    regexp: ^listen-address=
+    line: listen-address=127.0.0.1
+    insertafter: ^#listen-address
+    state: present
+  notify: 
+    - restart dnsmasq
+
+- name: add line in /etc/dnsmasq.conf to set bind-interfaces
+  lineinfile:
+    dest: /etc/dnsmasq.conf
+    line: bind-interfaces
+    insertafter: ^#bind-interfaces
+    state: present
+  notify: 
+    - restart dnsmasq
 
 - name: ensure dnsmasq service is started and enabled
   service:
