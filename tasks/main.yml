@@ -1,5 +1,5 @@
 ---
-- name: install dnsmasq packages
+- name: ensure dnsmasq packages are installed
   apt: 
     pkg: "{{ item }}" 
     state: latest 
@@ -45,3 +45,4 @@
     state: started
   with_items:
     - dnsmasq
+
