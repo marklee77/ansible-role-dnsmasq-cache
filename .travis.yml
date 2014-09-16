@@ -10,7 +10,11 @@ install:
 
     # Install Ansible.
     - sudo apt-get -y install ansible
+
     - ansible-playbook --version
+
+    # Install dig for tests
+    - sudo apt-get -y install dnsutils
 
 script:
 
